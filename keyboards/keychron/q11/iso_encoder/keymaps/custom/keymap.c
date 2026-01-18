@@ -165,10 +165,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         clear_oneshot_mods();
         add_mods(mods);
         send_keyboard_report();
-        wait_ms(15);
+        wait_ms(5);
         register_code(keycode);
         send_keyboard_report();
-        wait_ms(15);
+        wait_ms(5);
         unregister_code(keycode);
         del_mods(mods);
         send_keyboard_report();

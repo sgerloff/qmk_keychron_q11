@@ -92,20 +92,20 @@ const uint16_t PROGMEM r_ctrl_shift_combo[] = {KC_H, KC_J, COMBO_END};
 const uint16_t PROGMEM r_gui_shift_combo[] = {KC_H, KC_K, COMBO_END};
 
 combo_t key_combos[] = {
-  COMBO(l_ctrl_combo, OSM_LCTL),
-  COMBO(l_gui_combo, OSM_LGUI),
-  COMBO(l_alt_combo, OSM_LALT),
-  COMBO(l_ctrl_gui_combo, OSM(MOD_LCTL | MOD_LGUI)),
-  COMBO(l_ctrl_alt_combo, OSM(MOD_LCTL | MOD_LALT)),
-  COMBO(l_ctrl_shift_combo, OSM(MOD_LCTL | MOD_LSFT)),
-  COMBO(l_gui_shift_combo, OSM(MOD_LGUI | MOD_LSFT)),
-  COMBO(r_ctrl_combo, OSM_RCTL),
-  COMBO(r_gui_combo, OSM_RGUI),
-  COMBO(r_alt_combo, OSM_LALT),
-  COMBO(r_ctrl_gui_combo, OSM(MOD_RCTL | MOD_RGUI)),
-  COMBO(r_ctrl_alt_combo, OSM(MOD_RCTL | MOD_LALT)),
-  COMBO(r_ctrl_shift_combo, OSM(MOD_RCTL | MOD_RSFT)),
-  COMBO(r_gui_shift_combo, OSM(MOD_RGUI | MOD_RSFT)),
+  COMBO(l_ctrl_combo, OS_LCTL),
+  COMBO(l_gui_combo, OS_LGUI),
+  COMBO(l_alt_combo, OS_LALT),
+  COMBO(l_ctrl_gui_combo, OS_LCG),
+  COMBO(l_ctrl_alt_combo, OS_LCA),
+  COMBO(l_ctrl_shift_combo, OS_LCS),
+  COMBO(l_gui_shift_combo, OS_LSG),
+  COMBO(r_ctrl_combo, OS_RCTL),
+  COMBO(r_gui_combo, OS_RGUI),
+  COMBO(r_alt_combo, OS_LALT),
+  COMBO(r_ctrl_gui_combo, OS_RCG),
+  COMBO(r_ctrl_alt_combo, OS_RCA),
+  COMBO(r_ctrl_shift_combo, OS_RCS),
+  COMBO(r_gui_shift_combo, OS_RSG),
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -114,8 +114,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
          KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,    KC_RBRC,                      KC_PGDN,
          KC_F18,  KC_ESC,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,      KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
-         KC_F17, KC_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             KC_RSFT,   KC_UP,
-         KC_F16,OSM_LCTL,  OSM_LGUI, OSM_LALT,OSM_LSPR,  LT(CUSTOM_SYM, KC_SPC),                      OSL_SYM,          OSM_RALT, OSL_CFN,OSM_RCTL,   KC_LEFT,  KC_DOWN,  KC_RGHT),
+         KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
+         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT,OSM_LSPR,  LT(CUSTOM_SYM, KC_SPC),                      OSL_SYM,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [CUSTOM_SYM] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
@@ -150,3 +150,31 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
     [WIN_FN]   = { ENCODER_CCW_CW(RM_VALD, RM_VALU), ENCODER_CCW_CW(RM_VALD, RM_VALU) }
 };
 #endif // ENCODER_MAP_ENABLE
+
+#ifdef COMBO_MUST_HOLD_PER_COMBO
+bool get_combo_must_hold(uint16_t combo_index, combo_t *combo) {
+  return true;
+}
+#endif
+
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+  if (record->event.pressed) {
+    uint8_t mods = get_oneshot_mods();
+    if (mods & MOD_MASK_SHIFT) {
+      if ((keycode >= KC_A && keycode <= KC_0) || (keycode >= KC_MINUS && keycode <= KC_SLASH)) {
+        clear_oneshot_mods();
+        add_mods(mods);
+        send_keyboard_report();
+        wait_ms(15);
+        register_code(keycode);
+        send_keyboard_report();
+        wait_ms(15);
+        unregister_code(keycode);
+        del_mods(mods);
+        send_keyboard_report();
+        return false;
+      }
+    }
+  }
+  return true;
+}

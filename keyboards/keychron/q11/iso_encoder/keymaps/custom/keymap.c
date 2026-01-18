@@ -108,6 +108,14 @@ combo_t key_combos[] = {
   COMBO(r_gui_shift_combo, OS_RSG),
 };
 
+enum tap_dance{
+  TD_LBRC_RBRC,
+};
+
+tap_dance_action_t tap_dance_actions[] = {
+  [TD_LBRC_RBRC] = ACTION_TAP_DANCE_DOUBLE(DE_LBRC, DE_RBRC),
+};
+
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
@@ -121,7 +129,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
         _______,  _______,    DE_AT,  DE_LANG,  DE_RANG,   DE_EQL,  DE_FTIK,   DE_BTIK,   DE_EQL,  DE_PLUS,  DE_ASTR,   DE_MIN,  _______,    DE_TILD,                      _______,
-        _______,  _______,  DE_LPRN,  DE_LCBR,  DE_LBRC,  DE_DQUO,  DE_SLSH,   DE_BSLH,  DE_DQUO,  DE_RBRC,  DE_RCBR,  DE_RPRN,  _______,    _______,  _______,            _______,
+        _______,  _______,  DE_LPRN,  DE_LCBR,  TD(TD_LBRC_RBRC),  DE_DQUO,  DE_SLSH,   DE_BSLH,  DE_DQUO,  DE_RBRC,  DE_RCBR,  DE_RPRN,  _______,    _______,  _______,            _______,
         _______,  _______,  DE_PIPE,  _______,  _______,  _______,  DE_SQUO,   DE_TILD,  _______,  DE_SQUO,  _______,  _______,  _______,              _______,  _______,
         _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
 
@@ -178,3 +186,17 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   }
   return true;
 }
+
+
+const key_override_t lbrc_to_rbrc_override = ko_make_with_layers_and_negmods(
+    MOD_MASK_SHIFT,
+    KC_BSPC,
+    KC_DEL,
+    0xFFFF,
+    0
+);
+
+const key_override_t *key_overrides[] = (const key_override_t *[]) {
+  &lbrc_to_rbrc_override,
+  NULL
+};

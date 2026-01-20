@@ -67,62 +67,52 @@ enum layers{
 #define DE_TILD   RALT(KC_RBRC) // ~
 #define DE_PIPE   RALT(KC_NUBS) // |
 
-const uint16_t PROGMEM l_ctrl_combo[] = {KC_D, KC_F, COMBO_END};
-const uint16_t PROGMEM l_gui_combo[] = {KC_S, KC_D, COMBO_END};
-const uint16_t PROGMEM l_alt_combo[] = {KC_E, KC_S, COMBO_END};
-const uint16_t PROGMEM l_ctrl_gui_combo[] = {KC_S, KC_F, COMBO_END};
-const uint16_t PROGMEM l_ctrl_alt_combo[] = {KC_E, KC_F, COMBO_END};
-const uint16_t PROGMEM l_ctrl_shift_combo[] = {KC_F, KC_G, COMBO_END};
-const uint16_t PROGMEM l_gui_shift_combo[] = {KC_D, KC_G, COMBO_END};
+#define MT_F LCTL_T(KC_F)
+#define MT_D LGUI_T(KC_D)
+#define MT_S LALT_T(KC_S)
 
-const uint16_t PROGMEM r_ctrl_combo[] = {KC_J, KC_K, COMBO_END};
-const uint16_t PROGMEM r_gui_combo[] = {KC_K, KC_L, COMBO_END};
-const uint16_t PROGMEM r_alt_combo[] = {KC_I, KC_L, COMBO_END};
-const uint16_t PROGMEM r_ctrl_gui_combo[] = {KC_J, KC_L, COMBO_END};
-const uint16_t PROGMEM r_ctrl_alt_combo[] = {KC_J, KC_I, COMBO_END};
-const uint16_t PROGMEM r_ctrl_shift_combo[] = {KC_H, KC_J, COMBO_END};
-const uint16_t PROGMEM r_gui_shift_combo[] = {KC_H, KC_K, COMBO_END};
+#define MT_J RCTL_T(KC_J)
+#define MT_K RGUI_T(KC_K)
+#define MT_L LALT_T(KC_L)
 
-combo_t key_combos[] = {
-  COMBO(l_ctrl_combo, OS_LCTL),
-  COMBO(l_gui_combo, OS_LGUI),
-  COMBO(l_alt_combo, OS_LALT),
-  COMBO(l_ctrl_gui_combo, OS_LCG),
-  COMBO(l_ctrl_alt_combo, OS_LCA),
-  COMBO(l_ctrl_shift_combo, OS_LCS),
-  COMBO(l_gui_shift_combo, OS_LSG),
-  COMBO(r_ctrl_combo, OS_RCTL),
-  COMBO(r_gui_combo, OS_RGUI),
-  COMBO(r_alt_combo, OS_LALT),
-  COMBO(r_ctrl_gui_combo, OS_RCG),
-  COMBO(r_ctrl_alt_combo, OS_RCA),
-  COMBO(r_ctrl_shift_combo, OS_RCS),
-  COMBO(r_gui_shift_combo, OS_RSG),
-};
 
 enum tap_dance{
   TD_LBRC_RBRC,
+  TD_LCBR_RCBR,
+  TD_LPRN_RPRN,
+  TD_LANG_RANG,
+  TD_SLSH_BSLH,
 };
 
 tap_dance_action_t tap_dance_actions[] = {
   [TD_LBRC_RBRC] = ACTION_TAP_DANCE_DOUBLE(DE_LBRC, DE_RBRC),
+  [TD_LCBR_RCBR] = ACTION_TAP_DANCE_DOUBLE(DE_LCBR, DE_RCBR),
+  [TD_LPRN_RPRN] = ACTION_TAP_DANCE_DOUBLE(DE_LPRN, DE_RPRN),
+  [TD_LANG_RANG] = ACTION_TAP_DANCE_DOUBLE(DE_LANG, DE_RANG),
+  [TD_SLSH_BSLH] = ACTION_TAP_DANCE_DOUBLE(DE_SLSH, DE_BSLH),
 };
+
+#define TD_BRC TD(TD_LBRC_RBRC)
+#define TD_CBR TD(TD_LCBR_RCBR)
+#define TD_PRN TD(TD_LPRN_RPRN)
+#define TD_ANG TD(TD_LANG_RANG)
+#define TD_SLH TD(TD_SLSH_BSLH)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
          KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,    KC_RBRC,                      KC_PGDN,
-         KC_F18,  KC_ESC,   KC_A,     KC_S,     KC_D,     KC_F,     KC_G,      KC_H,     KC_J,     KC_K,     KC_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
+         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     KC_G,      KC_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
          KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
-         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT,OSM_LSPR,  LT(CUSTOM_SYM, KC_SPC),                      OSL_SYM,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
+         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT,OSM_LSPR,                  KC_SPC,                      OSL_SYM,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [CUSTOM_SYM] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,    DE_AT,  DE_LANG,  DE_RANG,   DE_EQL,  DE_FTIK,   DE_BTIK,   DE_EQL,  DE_PLUS,  DE_ASTR,   DE_MIN,  _______,    DE_TILD,                      _______,
-        _______,  _______,  DE_LPRN,  DE_LCBR,  TD(TD_LBRC_RBRC),  DE_DQUO,  DE_SLSH,   DE_BSLH,  DE_DQUO,  DE_RBRC,  DE_RCBR,  DE_RPRN,  _______,    _______,  _______,            _______,
-        _______,  _______,  DE_PIPE,  _______,  _______,  _______,  DE_SQUO,   DE_TILD,  _______,  DE_SQUO,  _______,  _______,  _______,              _______,  _______,
+        _______,  _______,    DE_AT,  DE_LANG,   TD_ANG,  DE_DQUO,  DE_FTIK,   DE_BTIK,  KC_HOME,    KC_UP,   KC_END,   DE_MIN,  _______,    DE_TILD,                      _______,
+        _______,  _______,   TD_CBR,   TD_BRC,   TD_PRN,   DE_EQL,   TD_SLH,   DE_BSLH,  KC_LEFT,  KC_DOWN,  KC_RGHT,  DE_RPRN,  _______,    _______,  _______,            _______,
+        _______,  _______,  DE_PIPE,  _______,  _______,  DE_SQUO,  _______,   _______,  DE_TILD,  DE_SQUO,  _______,  _______,  _______,              _______,  _______,
         _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
 
     [WIN_BASE] = LAYOUT_92_iso(
@@ -151,11 +141,6 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif // ENCODER_MAP_ENABLE
 
-#ifdef COMBO_MUST_HOLD_PER_COMBO
-bool get_combo_must_hold(uint16_t combo_index, combo_t *combo) {
-  return true;
-}
-#endif
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
@@ -180,15 +165,33 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 }
 
 
-const key_override_t lbrc_to_rbrc_override = ko_make_with_layers_and_negmods(
-    MOD_MASK_SHIFT,
-    KC_BSPC,
-    KC_DEL,
-    0xFFFF,
-    0
-);
+// const key_override_t lbrc_to_rbrc_override = ko_make_with_layers_and_negmods(
+//     MOD_MASK_SHIFT,
+//     KC_BSPC,
+//     KC_DEL,
+//     0xFFFF,
+//     0
+// );
+//
+// const key_override_t *key_overrides[] = (const key_override_t *[]) {
+//   &lbrc_to_rbrc_override,
+//   NULL
+// };
 
-const key_override_t *key_overrides[] = (const key_override_t *[]) {
-  &lbrc_to_rbrc_override,
-  NULL
-};
+
+#ifdef CHORDAL_HOLD
+const char chordal_hold_layout[MATRIX_ROWS][MATRIX_COLS] PROGMEM = LAYOUT_92_iso(
+  // Row 0: Macro + Esc + F1-F6 (L), F7-F12 + Nav (R)
+  'L',  'L', 'L', 'L', 'L', 'L', 'L', 'L',    'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  // Row 1: Macro + ` + 1-5 (L), 6-0 + Symbols + BSPC + PgUp (R)
+  'L',  'L', 'L', 'L', 'L', 'L', 'L',         'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  // Row 2: Macro + Tab + Q-T (L), Y-P + [ ] + PgDn (R)
+  'L',  'L', 'L', 'L', 'L', 'L', 'L',         'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  // Row 3: Macro + Caps + A-G (L), H-' + # + Enter + Home (R)
+  'L',  'L', 'L', 'L', 'L', 'L', 'L',         'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  // Row 4: Macro + Shift + \ + Z-B (L), N-/ + Shift + Up (R)
+  'L',  'L', 'L', 'L', 'L', 'L', 'L', 'L',    'R', 'R', 'R', 'R', 'R', 'R', 'R',
+  // Row 5: Macro + Mods + Space (L), Space + Mods + Arrows (R)
+  'L',  'L', 'L', 'L', 'L', 'L',              'R', 'R', 'R', 'R', 'R', 'R', 'R'
+);
+#endif

@@ -29,14 +29,6 @@ enum layers{
 #define OSL_SYM OSL(CUSTOM_SYM)
 // #define OSM_HYPR OSM(MOD_HYPR)
 #define OSM_LSPR OSM(MOD_LCTL | MOD_LSFT | MOD_LGUI)
-#define OSM_LGUI OSM(MOD_LGUI)
-#define OSM_LCTL OSM(MOD_LCTL)
-#define OSM_LSFT OSM(MOD_LSFT)
-#define OSM_LALT OSM(MOD_LALT)
-#define OSM_RSFT OSM(MOD_RSFT)
-#define OSM_RCTL OSM(MOD_RCTL)
-#define OSM_RGUI OSM(MOD_RGUI)
-#define OSM_RALT OSM(MOD_RALT)
 
 // Symbols
 #define DE_EXLM    S(KC_1)    // !

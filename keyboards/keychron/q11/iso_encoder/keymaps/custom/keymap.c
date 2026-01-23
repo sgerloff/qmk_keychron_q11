@@ -18,6 +18,7 @@
 enum layers{
     CUSTOM_BASE,
     CUSTOM_SYM,
+    CUSTOM_NAV,
     WIN_BASE,
     WIN_FN,
 };
@@ -33,7 +34,8 @@ enum layers{
 // Symbols
 #define DE_EXLM    S(KC_1)    // !
 #define DE_DQUO    S(KC_2)    // "
-#define DE_HASH    S(KC_3)    // #
+#define DE_HASH    KC_NUHS    // #
+#define DE_LEGL    S(KC_3)    // #
 #define DE_DLR     S(KC_4)    // $
 #define DE_PERC    S(KC_5)    // %
 #define DE_AMPR    S(KC_6)    // &
@@ -67,10 +69,12 @@ enum layers{
 #define DE_TILD   RALT(KC_RBRC) // ~
 #define DE_PIPE   RALT(KC_NUBS) // |
 
+#define LT_G LT(CUSTOM_SYM, KC_G)
 #define MT_F LCTL_T(KC_F)
 #define MT_D LGUI_T(KC_D)
 #define MT_S LALT_T(KC_S)
 
+#define LT_H LT(CUSTOM_SYM, KC_H)
 #define MT_J RCTL_T(KC_J)
 #define MT_K RGUI_T(KC_K)
 #define MT_L LALT_T(KC_L)
@@ -82,6 +86,7 @@ enum tap_dance{
   TD_LPRN_RPRN,
   TD_LANG_RANG,
   TD_SLSH_BSLH,
+  TD_DQUO_SQUO,
 };
 
 tap_dance_action_t tap_dance_actions[] = {
@@ -90,6 +95,7 @@ tap_dance_action_t tap_dance_actions[] = {
   [TD_LPRN_RPRN] = ACTION_TAP_DANCE_DOUBLE(DE_LPRN, DE_RPRN),
   [TD_LANG_RANG] = ACTION_TAP_DANCE_DOUBLE(DE_LANG, DE_RANG),
   [TD_SLSH_BSLH] = ACTION_TAP_DANCE_DOUBLE(DE_SLSH, DE_BSLH),
+  [TD_DQUO_SQUO] = ACTION_TAP_DANCE_DOUBLE(DE_DQUO, DE_SQUO),
 };
 
 #define TD_BRC TD(TD_LBRC_RBRC)
@@ -97,22 +103,31 @@ tap_dance_action_t tap_dance_actions[] = {
 #define TD_PRN TD(TD_LPRN_RPRN)
 #define TD_ANG TD(TD_LANG_RANG)
 #define TD_SLH TD(TD_SLSH_BSLH)
+#define TD_QUO TD(TD_DQUO_SQUO)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
          KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,    KC_RBRC,                      KC_PGDN,
-         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     KC_G,      KC_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
+         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     LT_G,      LT_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
          KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
-         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT,OSM_LSPR,                  KC_SPC,                      OSL_SYM,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
+         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT, OSL(CUSTOM_NAV),                 KC_SPC,               OS_LSFT,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [CUSTOM_SYM] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,    DE_AT,  DE_LANG,   TD_ANG,  DE_DQUO,  DE_FTIK,   DE_BTIK,  KC_HOME,    KC_UP,   KC_END,   DE_MIN,  _______,    DE_TILD,                      _______,
-        _______,  _______,   TD_CBR,   TD_BRC,   TD_PRN,   DE_EQL,   TD_SLH,   DE_BSLH,  KC_LEFT,  KC_DOWN,  KC_RGHT,  DE_RPRN,  _______,    _______,  _______,            _______,
-        _______,  _______,  DE_PIPE,  _______,  _______,  DE_SQUO,  _______,   _______,  DE_TILD,  DE_SQUO,  _______,  _______,  _______,              _______,  _______,
+        _______,  _______,    DE_AT,  DE_EXLM,   TD_BRC,   TD_QUO,  DE_PLUS,   DE_ASTR,     KC_7,     KC_8,     KC_9,  KC_MINS,  DE_FTIK,    DE_TILD,                      _______,
+        _______,  _______,   DE_DLR,   TD_CBR,   TD_PRN,   DE_EQL,   TD_SLH,   DE_AMPR,     KC_4,     KC_5,     KC_6,  DE_PERC,  DE_QUES,    _______,  _______,            _______,
+        _______,  _______,  DE_PIPE,  _______,  _______,  _______,  DE_HASH,   DE_TILD,     KC_0,     KC_1,     KC_2,     KC_3,  DE_BTIK,              _______,  _______,
+        _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
+
+    [CUSTOM_NAV] = LAYOUT_92_iso(
+        KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,   KC_HOME,  KC_PGDN,  KC_PGUP,   KC_END,  _______,  _______,    _______,                      _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,   KC_LEFT,  KC_DOWN,    KC_UP,  KC_RGHT,  _______,  _______,    _______,  _______,            _______,
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,
         _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
 
     [WIN_BASE] = LAYOUT_92_iso(

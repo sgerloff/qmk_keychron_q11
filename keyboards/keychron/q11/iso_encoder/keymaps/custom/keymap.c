@@ -69,15 +69,15 @@ enum layers{
 #define DE_TILD   RALT(KC_RBRC) // ~
 #define DE_PIPE   RALT(KC_NUBS) // |
 
-#define MT_G LALT_T(KC_G)
 #define MT_F LCTL_T(KC_F)
 #define MT_D LGUI_T(KC_D)
-#define MT_S LT(CUSTOM_SYM, KC_S)
+#define MT_S LALT_T(KC_S)
 
-#define MT_H LALT_T(KC_H)
 #define MT_J RCTL_T(KC_J)
 #define MT_K RGUI_T(KC_K)
-#define MT_L LT(CUSTOM_SYM, KC_L)
+#define MT_L LALT_T(KC_L)
+
+#define OSL_SYM OSL(CUSTOM_SYM)
 
 
 enum tap_dance{
@@ -109,16 +109,16 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
-         KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     DE_COLN,    KC_RBRC,                      KC_PGDN,
-         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     MT_G,      MT_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  DE_UNDS,    KC_NUHS,  KC_ENT,             KC_HOME,
-         KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
+         KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,    KC_RBRC,                      KC_PGDN,
+         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     KC_G,      KC_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
+         KC_F17, OSL_SYM,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OSL_SYM,   KC_UP,
          KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT, OSL(CUSTOM_NAV),                 KC_SPC,               OS_LSFT,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [CUSTOM_SYM] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,    DE_AT,  DE_QUES,  DE_TILD,  DE_AMPR,  DE_PLUS,   DE_ASTR,  KC_LBRC,  DE_QUES,  _______,  KC_MINS,  _______,    _______,                      _______,
-        _______,  _______,  KC_QUOT,  DE_EXLM,  DE_DQUO,   DE_EQL,  DE_SLSH,   DE_BSLH,  DE_LPRN,  DE_LBRC,  DE_LCBR,  DE_FTIK,  DE_BTIK,    _______,  _______,            _______,
+        _______,  _______,    DE_AT,  DE_QUES,  DE_TILD,  DE_AMPR,  DE_PLUS,   DE_ASTR,  DE_COLN,  DE_QUES,  _______,  KC_MINS,  _______,    _______,                      _______,
+        _______,  _______,  _______,  DE_EXLM,  DE_DQUO,   DE_EQL,  DE_SLSH,   DE_BSLH,  DE_LPRN,  DE_LBRC,  DE_LCBR,  DE_FTIK,  DE_BTIK,    _______,  _______,            _______,
         _______,  _______,  DE_PIPE,  _______,  DE_SQUO,  DE_PERC,  DE_HASH,   _______,  _______,  DE_RPRN,  DE_RBRC,  DE_RCBR,  _______,              _______,  _______,
         _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
 

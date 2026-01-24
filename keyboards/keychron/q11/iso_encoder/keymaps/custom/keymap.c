@@ -44,9 +44,13 @@ enum layers{
 #define DE_RPRN    S(KC_9)    // )
 #define DE_EQL     S(KC_0)    // =
 #define DE_QUES    S(KC_MINS) // ?
-                              //
+#define DE_GRV     KC_GRV     // ^
+#define DE_CELS    S(KC_GRV)  // °
 #define DE_FTIK    KC_EQL     // ´
 #define DE_BTIK    S(KC_EQL)  // `
+#define DE_EURO    RALT(KC_E) // €
+#define DE_MU      RALT(KC_M) // µ
+#define DE_PARA    S(KC_3)    // §
 
 #define DE_PLUS    KC_RBRC    // +
 #define DE_ASTR    S(KC_RBRC) // *
@@ -80,46 +84,21 @@ enum layers{
 #define OSL_SYM OSL(CUSTOM_SYM)
 
 
-enum tap_dance{
-  TD_LBRC_RBRC,
-  TD_LCBR_RCBR,
-  TD_LPRN_RPRN,
-  TD_LANG_RANG,
-  TD_SLSH_BSLH,
-  TD_DQUO_SQUO,
-};
-
-tap_dance_action_t tap_dance_actions[] = {
-  [TD_LBRC_RBRC] = ACTION_TAP_DANCE_DOUBLE(DE_LBRC, DE_RBRC),
-  [TD_LCBR_RCBR] = ACTION_TAP_DANCE_DOUBLE(DE_LCBR, DE_RCBR),
-  [TD_LPRN_RPRN] = ACTION_TAP_DANCE_DOUBLE(DE_LPRN, DE_RPRN),
-  [TD_LANG_RANG] = ACTION_TAP_DANCE_DOUBLE(DE_LANG, DE_RANG),
-  [TD_SLSH_BSLH] = ACTION_TAP_DANCE_DOUBLE(DE_SLSH, DE_BSLH),
-  [TD_DQUO_SQUO] = ACTION_TAP_DANCE_DOUBLE(DE_DQUO, DE_SQUO),
-};
-
-#define TD_BRC TD(TD_LBRC_RBRC)
-#define TD_CBR TD(TD_LCBR_RCBR)
-#define TD_PRN TD(TD_LPRN_RPRN)
-#define TD_ANG TD(TD_LANG_RANG)
-#define TD_SLH TD(TD_SLSH_BSLH)
-#define TD_QUO TD(TD_DQUO_SQUO)
-
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
          KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     KC_LBRC,    KC_RBRC,                      KC_PGDN,
          KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     KC_G,      KC_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  KC_QUOT,    KC_NUHS,  KC_ENT,             KC_HOME,
-         KC_F17, OSL_SYM,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OSL_SYM,   KC_UP,
-         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT, OSL(CUSTOM_NAV),                 KC_SPC,               OS_LSFT,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
+         KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
+         KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT, OSL(CUSTOM_NAV),                 KC_SPC,               OSL_SYM,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
     [CUSTOM_SYM] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,    DE_AT,  DE_QUES,  DE_TILD,  DE_AMPR,  DE_PLUS,   DE_ASTR,  DE_COLN,  DE_QUES,  _______,  KC_MINS,  _______,    _______,                      _______,
-        _______,  _______,  _______,  DE_EXLM,  DE_DQUO,   DE_EQL,  DE_SLSH,   DE_BSLH,  DE_LPRN,  DE_LBRC,  DE_LCBR,  DE_FTIK,  DE_BTIK,    _______,  _______,            _______,
-        _______,  _______,  DE_PIPE,  _______,  DE_SQUO,  DE_PERC,  DE_HASH,   _______,  _______,  DE_RPRN,  DE_RBRC,  DE_RCBR,  _______,              _______,  _______,
+        _______,  _______,    DE_AT,  DE_SQUO,  DE_ASTR,  DE_FTIK,  DE_AMPR,   DE_LANG,  DE_RANG,  DE_LBRC,  DE_RBRC,   DE_GRV,  DE_CELS,    DE_TILD,                      _______,
+        _______,  _______,  DE_EXLM,  DE_DQUO,  DE_PLUS,   DE_EQL,  DE_SLSH,   DE_BSLH,  DE_LCBR,  DE_LPRN,  DE_RPRN,  DE_RCBR,  DE_QUES,    _______,  _______,            _______,
+        _______,  _______,  DE_PIPE,  DE_PARA,  DE_EURO,   DE_DLR,  DE_BTIK,   DE_PERC,  DE_HASH,    DE_MU,  DE_SCOL,  DE_COLN,  DE_UNDS,              _______,  _______,
         _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
 
     [CUSTOM_NAV] = LAYOUT_92_iso(

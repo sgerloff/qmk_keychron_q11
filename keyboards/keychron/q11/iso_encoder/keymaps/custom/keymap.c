@@ -69,15 +69,15 @@ enum layers{
 #define DE_TILD   RALT(KC_RBRC) // ~
 #define DE_PIPE   RALT(KC_NUBS) // |
 
-#define LT_G LT(CUSTOM_SYM, KC_G)
+#define MT_G LALT_T(KC_G)
 #define MT_F LCTL_T(KC_F)
 #define MT_D LGUI_T(KC_D)
-#define MT_S LALT_T(KC_S)
+#define MT_S LT(CUSTOM_SYM, KC_S)
 
-#define LT_H LT(CUSTOM_SYM, KC_H)
+#define MT_H LALT_T(KC_H)
 #define MT_J RCTL_T(KC_J)
 #define MT_K RGUI_T(KC_K)
-#define MT_L LALT_T(KC_L)
+#define MT_L LT(CUSTOM_SYM, KC_L)
 
 
 enum tap_dance{
@@ -110,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_DEL,   KC_END,   KC_MUTE,
          KC_F20,  KC_GRV,   KC_1,     KC_2,     KC_3,     KC_4,     KC_5,      KC_6,     KC_7,     KC_8,     KC_9,     KC_0,     KC_MINS,    KC_EQL,   KC_BSPC,            KC_PGUP,
          KC_F19,  KC_TAB,   KC_Q,     KC_W,     KC_E,     KC_R,     KC_T,      KC_Y,     KC_U,     KC_I,     KC_O,     KC_P,     DE_COLN,    KC_RBRC,                      KC_PGDN,
-         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     LT_G,      LT_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  DE_UNDS,    KC_NUHS,  KC_ENT,             KC_HOME,
+         KC_F18,  KC_ESC,   KC_A,     MT_S,     MT_D,     MT_F,     MT_G,      MT_H,     MT_J,     MT_K,     MT_L,     KC_SCLN,  DE_UNDS,    KC_NUHS,  KC_ENT,             KC_HOME,
          KC_F17, OS_LSFT,   KC_NUBS,  KC_Z,     KC_X,     KC_C,     KC_V,      KC_B,     KC_N,     KC_M,     KC_COMM,  KC_DOT,   KC_SLSH,             OS_RSFT,   KC_UP,
          KC_F16, OS_LCTL,   OS_LGUI,  OS_LALT, OSL(CUSTOM_NAV),                 KC_SPC,               OS_LSFT,         OS_RALT,  OSL_CFN,    OS_RCTL, KC_LEFT,  KC_DOWN,  KC_RGHT),
 
@@ -165,10 +165,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         clear_oneshot_mods();
         add_mods(mods);
         send_keyboard_report();
-        wait_ms(5);
+        wait_ms(10);
         register_code(keycode);
         send_keyboard_report();
-        wait_ms(5);
+        wait_ms(10);
         unregister_code(keycode);
         del_mods(mods);
         send_keyboard_report();

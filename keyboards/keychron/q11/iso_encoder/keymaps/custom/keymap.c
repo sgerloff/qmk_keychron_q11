@@ -83,6 +83,14 @@ enum layers{
 
 #define OSL_SYM OSL(CUSTOM_SYM)
 
+enum custom_keycodes {
+  MY_UNDO = SAFE_RANGE,
+  MY_CUT,
+  MY_COPY,
+  MY_PASTE,
+  MY_RWORD,
+  MY_LWORD,
+};
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_BASE] = LAYOUT_92_iso(
@@ -104,10 +112,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [CUSTOM_NAV] = LAYOUT_92_iso(
         KC_MUTE,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,  _______,  KC_MUTE,
         _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,  _______,  _______,  _______,  _______,  _______,   KC_HOME,  KC_PGDN,  KC_PGUP,   KC_END,  _______,  _______,    _______,                      _______,
-        _______,  _______,  _______,  _______,  _______,  _______,  _______,   KC_LEFT,  KC_DOWN,    KC_UP,  KC_RGHT,  _______,  _______,    _______,  _______,            _______,
-        _______,  _______,  _______,  _______,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,
-        _______,  _______,  _______,  _______,  _______,            _______,                       _______,            _______,  _______,    _______,  _______,  _______,  _______),
+        _______,  _______,  _______,  _______,  _______,  _______,  _______,   KC_HOME, MY_LWORD, MY_RWORD,   KC_END,  _______,  _______,    _______,                      _______,
+        _______,  _______,   MY_CUT,  MY_COPY, MY_PASTE,  _______,  _______,   KC_LEFT,  KC_DOWN,    KC_UP,  KC_RGHT,  _______,  _______,    _______,  _______,            _______,
+        _______,  _______,  _______,  MY_UNDO,  _______,  _______,  _______,   _______,  _______,  _______,  _______,  _______,  _______,              _______,  _______,
+        _______,  _______,  _______,  _______,  _______,            _______,                       OS_LSFT,            _______,  _______,    _______,  _______,  _______,  _______),
 
     [WIN_BASE] = LAYOUT_92_iso(
         KC_MUTE,  KC_ESC,   KC_F1,    KC_F2,    KC_F3,    KC_F4,    KC_F5,     KC_F6,    KC_F7,    KC_F8,    KC_F9,    KC_F10,   KC_F11,     KC_F12,   KC_INS,   KC_DEL,   KC_MUTE,
@@ -135,29 +143,82 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 };
 #endif // ENCODER_MAP_ENABLE
 
+uint16_t get_combinations(uint16_t mod, uint16_t key) {
+  return (mod == KC_LGUI) ? G(key) : C(key);
+}
+
+uint16_t get_os_modifier(void) {
+    os_variant_t host_os = detected_host_os();
+    return (host_os == OS_MACOS || host_os == OS_IOS) ? KC_LGUI : KC_LCTL;
+}
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
-  if (record->event.pressed) {
+    // Only process logic on the 'press' event, not the 'release'
+    if (!record->event.pressed) {
+        return true;
+    }
+
+    // Extract the base keycode if it's a Mod-Tap or Layer-Tap
+    uint16_t base_keycode = keycode;
+    if (keycode >= QK_MOD_TAP && keycode <= QK_MOD_TAP_MAX) {
+        base_keycode = QK_MOD_TAP_GET_TAP_KEYCODE(keycode);
+    } else if (keycode >= QK_LAYER_TAP && keycode <= QK_LAYER_TAP_MAX) {
+        base_keycode = QK_LAYER_TAP_GET_TAP_KEYCODE(keycode);
+    }
+
+    // 1. Handle Shift-Delay Workaround (Chrome Fix)
     uint8_t mods = get_oneshot_mods();
-    if (mods & MOD_MASK_SHIFT) {
-      if ((keycode >= KC_A && keycode <= KC_0) || (keycode >= KC_MINUS && keycode <= KC_SLASH)) {
+    bool is_shifted = (mods & MOD_MASK_SHIFT);
+    bool is_alphanumeric = (base_keycode >= KC_A && base_keycode <= KC_0) || 
+                           (base_keycode >= KC_MINUS && base_keycode <= KC_SLASH);
+
+    if (is_shifted && is_alphanumeric) {
         clear_oneshot_mods();
         add_mods(mods);
         send_keyboard_report();
         wait_ms(10);
+        
         register_code(keycode);
         send_keyboard_report();
         wait_ms(10);
         unregister_code(keycode);
+        
         del_mods(mods);
         send_keyboard_report();
-        return false;
-      }
+        return false; // Stop QMK from processing this key further
     }
-  }
-  return true;
-}
 
+    // 2. Handle OS-Aware Macros
+    uint16_t mod = get_os_modifier();
+
+    switch (keycode) {
+        case MY_UNDO:
+            tap_code16(get_combinations(mod, KC_Y)); 
+            return false;
+
+        case MY_CUT:
+            tap_code16(get_combinations(mod, KC_X));
+            return false;
+
+        case MY_COPY:
+            tap_code16(get_combinations(mod, KC_C));
+            return false;
+
+        case MY_PASTE:
+            tap_code16(get_combinations(mod, KC_V));
+            return false;
+
+        case MY_LWORD:
+            tap_code16(get_combinations(mod, KC_LEFT));
+            return false;
+
+        case MY_RWORD:
+            tap_code16(get_combinations(mod, KC_RGHT));
+            return false;
+    }
+
+    return true; // Process all other keys normally
+}
 
 // const key_override_t lbrc_to_rbrc_override = ko_make_with_layers_and_negmods(
 //     MOD_MASK_SHIFT,
